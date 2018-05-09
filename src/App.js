@@ -54,13 +54,15 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      newDate: new Date()
+      newDate: new Date(),
+      ticking: true,
     }
+    this.toggleTick = this.toggleTick.bind(this);
   }
   componentWillMount() {
     //console.log("componentWillMount");
-    this.interval = setInterval(this.tick.bind(this), 1000) 
-    
+    //this.interval = setInterval(this.tick.bind(this), 1000) 
+    this.setupTick(this.state.ticking)
   }
   componentDidMount() {
   //console.log("componentDidMount");
@@ -70,7 +72,7 @@ class App extends Component {
   }
   shouldComponentUpdate() {
   //console.log("shouldComponentUpdate");
-  return this.state.newDate.getSeconds() % 2 === 0 ? true : false;
+  return this.state.newDate.getSeconds();
   }
   componentWillUpdate() {
   //console.log("componentWillUpdate");
@@ -84,8 +86,29 @@ class App extends Component {
   tick () {
     this.setState({newDate: new Date()})
   }
+
+  setupTick (doTick) {
+    if (doTick) {
+      this.interval = setInterval(this.tick.bind(this), 1000);
+      this.tick()
+    }else{
+      clearInterval(this.interval);
+    }
+  }
+
   toggleTick () {
     console.log(this.interval, "toggleTick");
+    
+    this.setState(prevState => {
+      //o ! indica o contrário, se estiver true ao clicar fica false e vice-versa
+      let nextTickState = !this.state.ticking;
+      ticking: nextTickState
+      this.setupTick(nextTickState)
+      return{
+       ticking: nextTickState
+      }
+    })
+    
   }
 
 
@@ -107,12 +130,18 @@ class App extends Component {
       </div>
       
       <div>
-          { !!this.state.newDate ? this.state.newDate.toLocaleString() : ""}
+          {!!this.state.newDate ? this.state.newDate.toLocaleString() : ""}
 
       </div>
       
       <div>
-        <button onClick={this.toggleTick.bind(this)}>Toggle Tick</button>
+        <button onClick={this.toggleTick}>
+          {this.state.ticking ? "Parar relógio" : "Iniciar relógio"}
+        </button> 
+      </div>
+
+      <div>
+        {this.state.ticking ? "Está ticking" : "Não está ticking"}
       </div>
 
       </div>
