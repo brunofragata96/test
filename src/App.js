@@ -56,13 +56,22 @@ class App extends Component {
     this.state = {
       newDate: new Date(),
       ticking: true,
+      frase: "ainda não está aleatória",
+      frases: [
+        "Lorem ipsum dolor sit amet",
+        "consectetur adipiscing elit",
+        "Sed in justo blandit",
+        "Nulla sit amet imperdiet ipsum",
+      ]
     }
     this.toggleTick = this.toggleTick.bind(this);
+    this.novaFrase = this.novaFrase.bind(this);
   }
   componentWillMount() {
     //console.log("componentWillMount");
     //this.interval = setInterval(this.tick.bind(this), 1000) 
     this.setupTick(this.state.ticking)
+    this.setRandomFrase()
   }
   componentDidMount() {
   //console.log("componentDidMount");
@@ -83,6 +92,13 @@ class App extends Component {
   componentWillUnmount() {
   //console.log("componentWillUnmount");
   }
+
+  setRandomFrase () {
+    const frasesAUtilizar = this.state.frases;
+    let frasesIndex = Math.round(Math.random() * (frasesAUtilizar.length - 1));
+    this.setState({frase: frasesAUtilizar[frasesIndex]});
+  }
+
   tick () {
     this.setState({newDate: new Date()})
   }
@@ -111,6 +127,10 @@ class App extends Component {
     
   }
 
+  novaFrase() {
+      this.setRandomFrase();
+  }
+
 
   render() {
     return (
@@ -128,22 +148,37 @@ class App extends Component {
       <div>
         <TodoList/>
       </div>
-      
+      <br/>
       <div>
           {!!this.state.newDate ? this.state.newDate.toLocaleString() : ""}
-
       </div>
-      
+      <br/>
       <div>
         <button onClick={this.toggleTick}>
           {this.state.ticking ? "Parar relógio" : "Iniciar relógio"}
         </button> 
       </div>
-
+      <br/>
       <div>
         {this.state.ticking ? "Está ticking" : "Não está ticking"}
       </div>
 
+      <div>
+        <p>
+          frase aleatória é: {this.state.frase}
+        </p>
+        <button onClick={this.novaFrase}>
+          {this.state.ticking}<span>Nova Frase</span>
+        </button> 
+      </div>
+
+      <div>
+      </div>
+        <ul>
+          {this.state.frases.map((item, index) => {
+            return <li key={"frase" + index} >{item}</li>
+          })}
+        </ul>  
       </div>
     );
   }
