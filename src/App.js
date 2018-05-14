@@ -57,14 +57,10 @@ class App extends Component {
       newDate: new Date(),
       ticking: true,
       frase: "ainda não está aleatória",
-      frases: [
-        "Lorem ipsum dolor sit amet",
-        "consectetur adipiscing elit",
-        "Sed in justo blandit",
-        "Nulla sit amet imperdiet ipsum",
-      ],
+      frases: [],
       frase_adicionar: "",
       estado_frase: "",
+      update_state_message: "",
     }
     this.toggleTick = this.toggleTick.bind(this);
     this.novaFrase = this.novaFrase.bind(this);
@@ -76,6 +72,7 @@ class App extends Component {
     //this.interval = setInterval(this.tick.bind(this), 1000) 
     this.setupTick(this.state.ticking)
     this.setRandomFrase()
+    this.getLocalFrases()
   }
   componentDidMount() {
   //console.log("componentDidMount");
@@ -157,11 +154,32 @@ class App extends Component {
     }else{
       alert("a frase tem de estar preenchida!")
     }
+    this.setLocalFrases(this.state.frases)
   }
 
   handleRemove(fraseIndex, e) {
       this.state.frases.splice(fraseIndex, 1);
       this.setState({frases: this.state.frases})
+      localStorage.setItem("frases", this.state.frases)
+      this.setLocalFrases(this.state.frases)
+  }
+
+  getLocalFrases() {
+    let frases = localStorage.getItem("frases");
+    if (frases === null) {
+      frases = [];
+    }else{
+      frases = JSON.parse(frases)
+    }
+    this.setState({frases});
+  }
+
+  setLocalFrases (frases) {
+    this.setState({update_state_message: "A gravar dados localmente..."})
+    localStorage.setItem("frases", JSON.stringify(frases))
+    setTimeout(() => {
+      this.setState({update_state_message: ""})
+    },2000)
   }
 
   render() {
@@ -215,6 +233,7 @@ class App extends Component {
         </div>
 
         <div>
+          {this.state.update_state_message}
           <form onSubmit={this.handleSubmitForm}>
             <input ref={(el) => {this.frase_adicionar = el}} type="text" name="frase_adicionar" onChange={this.handleInputChange} value={this.state.frase_adicionar}></input>
             <select name="estado_frase" onChange={this.handleInputChange} value={this.state.estado_frase}> 
