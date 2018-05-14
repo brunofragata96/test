@@ -159,6 +159,11 @@ class App extends Component {
     }
   }
 
+  handleRemove(fraseIndex, e) {
+      this.state.frases.splice(fraseIndex, 1);
+      this.setState({frases: this.state.frases})
+  }
+
   render() {
     return (
       <div className="App">
@@ -202,7 +207,9 @@ class App extends Component {
         <div>
           <ul>
             {this.state.frases.map((item, index) => {
-              return <li key={"frase" + index} >{item}</li>
+              return <li key={"frase" + index} >
+              {item}<button onClick={this.handleRemove.bind(this, index)}>Remover</button>
+              </li>
             })}
           </ul>  
         </div>
