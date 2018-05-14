@@ -62,10 +62,14 @@ class App extends Component {
         "consectetur adipiscing elit",
         "Sed in justo blandit",
         "Nulla sit amet imperdiet ipsum",
-      ]
+      ],
+      frase_adicionar: "",
+      estado_frase: "",
     }
     this.toggleTick = this.toggleTick.bind(this);
     this.novaFrase = this.novaFrase.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleSubmitForm = this.handleSubmitForm.bind(this);
   }
   componentWillMount() {
     //console.log("componentWillMount");
@@ -75,6 +79,7 @@ class App extends Component {
   }
   componentDidMount() {
   //console.log("componentDidMount");
+  this.frase_adicionar.focus()
   }
   componentWillReceiveProps() {
   //console.log("componentWillReceiveProps");
@@ -128,9 +133,31 @@ class App extends Component {
   }
 
   novaFrase() {
-      this.setRandomFrase();
+    this.setRandomFrase();
   }
 
+  handleInputChange(event) {
+    console.log(event.target.value);
+    this.setState({
+      //os [] permitem adicionar um nome dinâmico à função
+      [event.target.name]: event.target.value
+    })
+  }
+
+  handleSubmitForm(event) {
+    event.preventDefault();
+    if(this.state.frase_adicionar !== "") {
+      this.state.frases.push(this.state.frase_adicionar);
+      //o set state volta a injectar dentro do state os novos dados
+      this.setState({
+        frases: this.state.frases,
+        frase_adicionar: "",
+      })
+      this.frase_adicionar.focus();
+    }else{
+      alert("a frase tem de estar preenchida!")
+    }
+  }
 
   render() {
     return (
@@ -181,10 +208,14 @@ class App extends Component {
         </div>
 
         <div>
-          <input></input>
-          <button onClick={this.novaFrase}>
-            <span>Nova Frase</span>
-          </button> 
+          <form onSubmit={this.handleSubmitForm}>
+            <input ref={(el) => {this.frase_adicionar = el}} type="text" name="frase_adicionar" onChange={this.handleInputChange} value={this.state.frase_adicionar}></input>
+            <select name="estado_frase" onChange={this.handleInputChange} value={this.state.estado_frase}> 
+              <option value="feito"> Feito </option>
+              <option value="porFazer"> Por Fazer </option>
+            </select>
+          </form>
+          <p> {this.state.frase_adicionar} </p>
         </div>
       
       </div>
