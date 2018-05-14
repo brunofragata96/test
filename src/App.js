@@ -145,40 +145,48 @@ class App extends Component {
           {grandeTextoDeWelcome}<br/>
           {grandeTextoDeWelcome2}
         </p>
-      <div>
-        <TodoList/>
-      </div>
-      <br/>
-      <div>
-          {!!this.state.newDate ? this.state.newDate.toLocaleString() : ""}
-      </div>
-      <br/>
-      <div>
-        <button onClick={this.toggleTick}>
-          {this.state.ticking ? "Parar relógio" : "Iniciar relógio"}
-        </button> 
-      </div>
-      <br/>
-      <div>
-        {this.state.ticking ? "Está ticking" : "Não está ticking"}
-      </div>
+        <div>
+          <TodoList/>
+        </div>
+        <br/>
+        <div>
+            {!!this.state.newDate ? this.state.newDate.toLocaleString() : ""}
+        </div>
+        <br/>
+        <div>
+          <button onClick={this.toggleTick}>
+            {this.state.ticking ? "Parar relógio" : "Iniciar relógio"}
+          </button> 
+        </div>
+        <br/>
+        <div>
+          {this.state.ticking ? "Está ticking" : "Não está ticking"}
+        </div>
 
-      <div>
-        <p>
-          frase aleatória é: {this.state.frase}
-        </p>
-        <button onClick={this.novaFrase}>
-          {this.state.ticking}<span>Nova Frase</span>
-        </button> 
-      </div>
+        <div>
+          <p>
+            frase aleatória é: {this.state.frase}
+          </p>
+          <button onClick={this.novaFrase}>
+            {this.state.ticking}<span>Nova Frase</span>
+          </button> 
+        </div>
 
-      <div>
-      </div>
-        <ul>
-          {this.state.frases.map((item, index) => {
-            return <li key={"frase" + index} >{item}</li>
-          })}
-        </ul>  
+        <div>
+          <ul>
+            {this.state.frases.map((item, index) => {
+              return <li key={"frase" + index} >{item}</li>
+            })}
+          </ul>  
+        </div>
+
+        <div>
+          <input></input>
+          <button onClick={this.novaFrase}>
+            <span>Nova Frase</span>
+          </button> 
+        </div>
+      
       </div>
     );
   }
