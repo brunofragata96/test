@@ -144,7 +144,10 @@ class App extends Component {
   handleSubmitForm(event) {
     event.preventDefault();
     if(this.state.frase_adicionar !== "") {
-      this.state.frases.push(this.state.frase_adicionar);
+      this.state.frases.push({
+        text: this.state.frase_adicionar,
+        done: this.state.estado_frase === "porFazer" ? false : true,
+      });
       //o set state volta a injectar dentro do state os novos dados
       this.setState({
         frases: this.state.frases,
@@ -173,7 +176,15 @@ class App extends Component {
 
   handleChangeFraseName(fraseIndex, e) {
     console.log("handleChangeFraseName", fraseIndex, e)
-    this.state.frases[fraseIndex] = e.target.value
+    this.state.frases[fraseIndex].text = e.target.value
+    this.setState({
+      frases: this.state.frases
+    })
+    this.setLocalFrases(this.state.frases)
+  }
+
+  handleToggleDone(fraseIndex, e) {
+    this.state.frases[fraseIndex].done = !this.state.frases[fraseIndex].done 
     this.setState({
       frases: this.state.frases
     })
@@ -241,15 +252,28 @@ class App extends Component {
         <div>
           <ul>
             {this.state.frases.map((item, index) => {
-              return <li key={"frase" + index}> 
+              return <li key={"frase" + index} className={item.done ? "done" : "tbd"}> 
               {
                 (this.state.frase_editing === index) ?
-                <input onChange={this.handleChangeFraseName.bind(this, index)} value={item}/>
-                : <span>{item}</span>
+                <input onChange={this.handleChangeFraseName.bind(this, index)} value={item.text}/>
+                : <span>{item.text}</span>
               }
-              <button onClick={this.handleRemove.bind(this, index)}  disabled={(!isNaN(this.state.frase_editing) && this.state.frase_editing !== null) ? "disabled" : "" }>Remover</button>
-              <button onClick={this.handleEdit.bind(this, index)}>
-              {(this.state.frase_editing === index) ? "stop edit" : "Edit"}</button>
+              <button 
+                onClick={this.handleToggleDone.bind(this, index)}>
+                Toggle
+              </button>
+
+              <button 
+                onClick={this.handleRemove.bind(this, index)}  
+                disabled={(!isNaN(this.state.frase_editing) && this.state.frase_editing !== null) ? "disabled" : "" }>
+                Remover
+              </button>
+
+              <button 
+                onClick={this.handleEdit.bind(this, index)}>
+                {(this.state.frase_editing === index) ? "stop edit" : "Edit"}
+              </button>
+
               </li>
             })}
           </ul>  
