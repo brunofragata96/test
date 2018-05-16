@@ -164,6 +164,22 @@ class App extends Component {
       this.setLocalFrases(this.state.frases)
   }
 
+  handleEdit(fraseIndex, e) {
+    this.setState({
+      frase_editing: this.state.frase_editing === fraseIndex ? null : fraseIndex    
+    })
+    setTimeout(() => console.log(this.state.frase_editing, this.state.frase_editing >= 0,!isNaN(this.state.frase_editing)), 10)
+  }
+
+  handleChangeFraseName(fraseIndex, e) {
+    console.log("handleChangeFraseName", fraseIndex, e)
+    this.state.frases[fraseIndex] = e.target.value
+    this.setState({
+      frases: this.state.frases
+    })
+    this.setLocalFrases(this.state.frases)
+  }
+
   getLocalFrases() {
     let frases = localStorage.getItem("frases");
     if (frases === null) {
@@ -225,8 +241,15 @@ class App extends Component {
         <div>
           <ul>
             {this.state.frases.map((item, index) => {
-              return <li key={"frase" + index} >
-              {item}<button onClick={this.handleRemove.bind(this, index)}>Remover</button>
+              return <li key={"frase" + index}> 
+              {
+                (this.state.frase_editing === index) ?
+                <input onChange={this.handleChangeFraseName.bind(this, index)} value={item}/>
+                : <span>{item}</span>
+              }
+              <button onClick={this.handleRemove.bind(this, index)}  disabled={(!isNaN(this.state.frase_editing) && this.state.frase_editing !== null) ? "disabled" : "" }>Remover</button>
+              <button onClick={this.handleEdit.bind(this, index)}>
+              {(this.state.frase_editing === index) ? "stop edit" : "Edit"}</button>
               </li>
             })}
           </ul>  
