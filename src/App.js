@@ -73,6 +73,7 @@ class App extends Component {
     this.setupTick(this.state.ticking)
     this.setRandomFrase()
     this.getLocalFrases()
+    //this.setLocalFrases([])
   }
   componentDidMount() {
   //console.log("componentDidMount");
@@ -98,7 +99,10 @@ class App extends Component {
   setRandomFrase () {
     const frasesAUtilizar = this.state.frases;
     let frasesIndex = Math.round(Math.random() * (frasesAUtilizar.length - 1));
-    this.setState({frase: frasesAUtilizar[frasesIndex]});
+    this.setState({
+      frase: !!frasesAUtilizar[frasesIndex]
+      ? frasesAUtilizar[frasesIndex.text] : ""
+    });
   }
 
   tick () {
